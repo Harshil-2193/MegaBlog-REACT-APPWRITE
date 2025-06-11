@@ -16,7 +16,7 @@ export class AuthService {
 
     async createAccount({email, password, name}){
         try{    
-            // Create account
+            // Create account Service
             const userAccount = await this.account.create(ID.unique(), email, password, name)
             
             // Login if the account is created using email and password.
@@ -25,34 +25,35 @@ export class AuthService {
             else
                 return userAccount;       
         }catch(err){
-            throw err;
+            console.log("AppWrite Service :: createAccount :: Error",err);
         }
     }
 
-    // Login Method
+    // Login Service
     async login({email,password}){
         try{    
             return await this.account.createEmailSession(email, password);
         }catch(err){
-            throw(err);
+            console.log("AppWrite Service :: Login :: Error",err);
         }
     }
 
+    // Get Current User Service
     async getCurrentUser(){
         try{
             return await this.account.get();
         }
         catch(err){
-            throw err;
+            console.log("AppWrite Service :: getCurrentUser :: Error",err);
         }
     }
 
-    
+    // Logout Service
     async logout(){
         try{    
             await this.account.deleteSessions();
         }catch(err){
-            throw(err);
+            console.log("AppWrite Service :: Logout :: Error",err);
         }
     }
 }
