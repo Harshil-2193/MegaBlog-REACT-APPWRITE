@@ -4,20 +4,20 @@ import {Client, Account, ID} from "appwrite";
 
 export class AuthService {
     client = new Client();
-    acount;
+    account;
 
     constructor(){
         this.client
         .setEndpoint(conf.appWriteUrl)
         .setProject(conf.appWriteProjectId);
 
-        this.acount = new Account(this.client);
+        this.account = new Account(this.client);
     }
 
     async createAccount({email, password, name}){
         try{    
             // Create account
-            const userAccount = await this.acount.create(ID.unique(), email, password, name)
+            const userAccount = await this.account.create(ID.unique(), email, password, name)
             
             // Login if the account is created using email and password.
             if(userAccount)
@@ -30,9 +30,9 @@ export class AuthService {
     }
 
     // Login Method
-    async login({email,pass}){
+    async login({email,password}){
         try{    
-            return await this.account.createEmailSession(email, pass);
+            return await this.account.createEmailSession(email, password);
         }catch(err){
             throw(err);
         }
@@ -40,18 +40,17 @@ export class AuthService {
 
     async getCurrentUser(){
         try{
-            return await this.acount.get();
+            return await this.account.get();
         }
         catch(err){
             throw err;
         }
-        return null;
     }
 
     
     async logout(){
         try{    
-            await this.acount.deleteSessions();
+            await this.account.deleteSessions();
         }catch(err){
             throw(err);
         }
@@ -60,4 +59,4 @@ export class AuthService {
 
 const authService = new AuthService();
 
-export default AuthService;
+export default authService;
