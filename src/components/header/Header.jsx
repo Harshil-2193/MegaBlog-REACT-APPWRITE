@@ -25,7 +25,7 @@ const Header = () => {
         </div>
         <ul className='flex ml-auto'>
           {
-            navItems.map((item,index)=>
+            navItems.map((item)=>
               item.active ? (
                 <li key={item.name}>
                   <button
