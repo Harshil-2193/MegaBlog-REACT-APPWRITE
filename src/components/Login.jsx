@@ -52,6 +52,8 @@ const Login = () => {
             {/* Login Form */}
             <form onSubmit={handleSubmit(login)} className='mt-8'>
                 <div className='space-y-5'>
+                    
+                    {/* Email */}
                     <Input 
                     label="Email: "
                     placeholder="Enter your email"
@@ -63,8 +65,9 @@ const Login = () => {
                         }
                     })} 
                     />
-                     {errors.email && <p className="text-red-500">{errors.email.message}</p>}
+                     {errors.email && (<p className="text-red-500">{errors.email.message}</p>)}
 
+                    {/* Password */}
                     <Input 
                     label="Password"
                     placeholder="Enter your password"
@@ -73,7 +76,7 @@ const Login = () => {
                         required:"Password is required"
                     })}
                     />
-                     {errors.password && <p className="text-red-500">{errors.password.message}</p>}
+                     {errors.password && (<p className="text-red-500">{errors.password.message}</p>)}
 
                     <Button
                     type='submit'

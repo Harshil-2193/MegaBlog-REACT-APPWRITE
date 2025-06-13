@@ -5,8 +5,10 @@ import Logo from "./Logo";
 import Logoutbtn from "./header/Logoutbtn";
 import Input from "./Input";
 import PostCard from "./PostCard";
-import Select from "./Select";
+import Select from "./Select"
 import Button from "./Button";
+import Signup from "./SignUp";
+import Login from "./Login";
+import AuthLayout from "./AuthLayout";
 
-
-export {Header, Footer, Container, Logo, Logoutbtn, Button, Select, PostCard, Input};
+export {Header, Footer, Container, Logo, Logoutbtn, Button,Select, PostCard, Input, Login, Signup, AuthLayout};
