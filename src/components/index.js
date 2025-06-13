@@ -3,5 +3,10 @@ import Footer from "./footer/Footer";
 import Container from "./container/container";
 import Logo from "./Logo";
 import Logoutbtn from "./header/Logoutbtn";
+import Input from "./Input";
+import PostCard from "./PostCard";
+import Select from "./Select";
+import Button from "./Button";
 
-export {Header, Footer, Container, Logo, Logoutbtn};
+
+export {Header, Footer, Container, Logo, Logoutbtn, Button, Select, PostCard, Input};
