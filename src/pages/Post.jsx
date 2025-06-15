@@ -50,7 +50,6 @@ const Post = () => {
 
     try {
       setDeleting(true);
-
       const status = await appwriteService.deletePost(post.$id);
       if (status) {
         await appwriteService.deleteFile(post.featuredImage);
@@ -69,39 +68,41 @@ const Post = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        <p>Loading Post...</p>
+      <div className="flex justify-center items-center h-screen bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900">
+        <p className="text-white text-xl font-semibold">Loading Post...</p>
       </div>
     );
   }
 
   if (!post) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        <p>Post not found.</p>
+      <div className="flex justify-center items-center h-screen bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900">
+        <p className="text-white text-xl font-semibold">Post not found.</p>
       </div>
     );
   }
 
   return (
-    <div className="py-8">
+    <div className="py-12 bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900 min-h-screen">
       <Container>
-        <div className="w-full flex justify-center mb-4 relative border rounded-xl p-2">
+        <div className="w-full flex justify-center mb-8 relative border rounded-2xl p-4 bg-white shadow-2xl">
           <img
             src={appwriteService.getFilePreview(post.featuredImage)}
             alt={post.title}
-            className="rounded-xl"
+            className="rounded-xl max-h-[600px] object-cover"
           />
 
           {isAuthor && (
-            <div className="absolute right-6 top-6 flex gap-3">
+            <div className="absolute right-6 top-6 flex gap-4">
               <Link to={`/edit-post/${post.$id}`}>
-                <Button bgColor="bg-green-500">Edit</Button>
+                <Button className="bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg px-4 py-2 shadow-md">
+                  Edit
+                </Button>
               </Link>
               <Button
-                bgColor="bg-red-500"
                 onClick={deletePost}
                 disabled={deleting}
+                className="bg-red-500 hover:bg-red-600 text-white font-semibold rounded-lg px-4 py-2 shadow-md"
               >
                 {deleting ? "Deleting..." : "Delete"}
               </Button>
@@ -109,11 +110,15 @@ const Post = () => {
           )}
         </div>
 
-        <div className="w-full mb-6">
-          <h1 className="text-2xl font-bold">{post.title}</h1>
+        <div className="w-full mb-8 text-center">
+          <h1 className="text-4xl font-extrabold text-white drop-shadow-lg">
+            {post.title}
+          </h1>
         </div>
 
-        <div className="browser-css">{parse(post.content)}</div>
+        <div className="browser-css bg-white p-8 rounded-xl shadow-xl">
+          {parse(post.content)}
+        </div>
       </Container>
     </div>
   );

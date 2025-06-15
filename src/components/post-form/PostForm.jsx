@@ -4,7 +4,6 @@ import { Button, Input, Select, RTE } from "../index";
 import appwriteService from "../../appwrite/config";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { SHOULD_AUTOBATCH } from "@reduxjs/toolkit";
 
 const PostForm = ({ post }) => {
   const {
@@ -28,7 +27,6 @@ const PostForm = ({ post }) => {
   const userData = useSelector((state) => state.auth.userData);
 
   const submit = async (data) => {
-    // Post Avaiable(Update)
     if (post) {
       const file = data.image[0]
         ? await appwriteService.uploadFile(data.image[0])
@@ -43,9 +41,7 @@ const PostForm = ({ post }) => {
         featuredImage: file ? file.$id : undefined,
       });
       if (dbPost) navigate(`/post/${dbPost.$id}`);
-    }
-    // New Post (Create)
-    else {
+    } else {
       const file = await appwriteService.uploadFile(
         data.image[0] ? data.image[0] : undefined
       );
@@ -73,13 +69,8 @@ const PostForm = ({ post }) => {
 
   useEffect(() => {
     const subscription = watch((value, { name }) => {
-      if (name == "title") {
-        setValue(
-          "slug",
-          slugTransform(value.title, {
-            shouldValidate: true,
-          })
-        );
+      if (name === "title") {
+        setValue("slug", slugTransform(value.title, { shouldValidate: true }));
       }
     });
 
@@ -89,18 +80,26 @@ const PostForm = ({ post }) => {
   }, [watch, slugTransform, setValue]);
 
   return (
-    <form onSubmit={handleSubmit(submit)} className="flex flex-wrap">
-      <div className="w-2/3 px-2">
+    <form
+      onSubmit={handleSubmit(submit)}
+      className="flex flex-wrap gap-6 bg-white p-8 rounded-xl shadow-xl border border-gray-200"
+    >
+      {/* Left Section */}
+      <div className="w-full lg:w-2/3 flex flex-col gap-5">
         <Input
-          label="Title :"
-          placeholder="Title"
-          className="mb-4"
+          label="Title"
+          placeholder="Enter Post Title"
+          className=""
           {...register("title", { required: "Title is required." })}
         />
+        {errors.title && (
+          <p className="text-red-500 text-sm">{errors.title.message}</p>
+        )}
+
         <Input
-          label="Slug :"
+          label="Slug"
           placeholder="Slug"
-          className="mb-4"
+          className=""
           {...register("slug", { required: "Slug is required." })}
           onInput={(e) => {
             setValue("slug", slugTransform(e.currentTarget.value), {
@@ -108,42 +107,58 @@ const PostForm = ({ post }) => {
             });
           }}
         />
+        {errors.slug && (
+          <p className="text-red-500 text-sm">{errors.slug.message}</p>
+        )}
+
         <RTE
-          label="Content :"
+          label="Content"
           name="content"
           control={control}
           defaultValue={getValues("content") || ""}
         />
       </div>
-      <div className="w-1/3 px-2">
+
+      {/* Right Section */}
+      <div className="w-full lg:w-1/3 flex flex-col gap-5">
         <Input
-          label="Featured Image :"
+          label="Featured Image"
           type="file"
-          className="mb-4"
           accept="image/png, image/jpg, image/jpeg, image/gif"
           {...register("image", { required: !post })}
         />
+        {errors.image && (
+          <p className="text-red-500 text-sm">Featured Image is required.</p>
+        )}
+
         {post && (
-          <div className="w-full mb-4">
+          <div className="w-full">
             <img
               src={appwriteService.getFilePreview(post.featuredImage)}
               alt={post.title}
-              className="rounded-lg"
+              className="rounded-lg border border-gray-300"
             />
           </div>
         )}
+
         <Select
           options={["active", "inactive"]}
           label="Status"
-          className="mb-4"
           {...register("status", { required: true })}
         />
         <Button
           type="submit"
           bgColor={post ? "bg-green-500" : undefined}
-          className="w-full"
+          className="w-full py-3"
+          disabled={isSubmitting}
         >
-          {post ? "Update" : "Submit"}
+          {isSubmitting
+            ? post
+              ? "Updating..."
+              : "Submitting..."
+            : post
+            ? "Update"
+            : "Submit"}
         </Button>
       </div>
     </form>
