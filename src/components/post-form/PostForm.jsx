@@ -25,7 +25,7 @@ const PostForm = ({ post }) => {
   });
 
   const navigate = useNavigate();
-  const userData = useSelector((state) => state.user.userData);
+  const userData = useSelector((state) => state.auth.userData);
 
   const submit = async (data) => {
     // Post Avaiable(Update)
@@ -51,8 +51,7 @@ const PostForm = ({ post }) => {
       );
 
       if (file) {
-        const fileId = file.$id;
-        data.featuredImage = fileId;
+        data.featuredImage = file.$id;
         const dbPost = await appwriteService.createPost({
           ...data,
           userId: userData.$id,
