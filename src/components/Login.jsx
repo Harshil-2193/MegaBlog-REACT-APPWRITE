@@ -31,8 +31,8 @@ const Login = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-black px-4 rounded-xl">
-      <div className="w-full max-w-md bg-white/10 backdrop-blur-md rounded-3xl shadow-2xl p-8 md:p-10 border border-white/20">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-tr from-[#0f0c29] via-[#302b63] to-[#24243e] px-4 rounded-xl">
+      <div className="w-full max-w-md bg-white/5 backdrop-blur-lg rounded-3xl shadow-2xl p-8 md:p-10 border border-white/20">
         <div className="mb-6 flex justify-center">
           <span className="w-full inline-block max-w-[100px]">
             <Logo width="100px" />

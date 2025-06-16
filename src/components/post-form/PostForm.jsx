@@ -1,9 +1,10 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { Button, Input, Select, RTE } from "../index";
 import appwriteService from "../../appwrite/config";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { debounce } from "lodash";
 
 const PostForm = ({ post }) => {
   const {
@@ -25,6 +26,8 @@ const PostForm = ({ post }) => {
 
   const navigate = useNavigate();
   const userData = useSelector((state) => state.auth.userData);
+
+  const isSlugEditedRef = useRef(false);
 
   const submit = async (data) => {
     if (post) {
@@ -61,23 +64,32 @@ const PostForm = ({ post }) => {
   const slugTransform = useCallback((value) => {
     if (value && typeof value === "string") {
       const slug = value.trim().toLowerCase().replace(/ /g, "_");
-      setValue("slug", slug);
       return slug;
     }
     return "";
   });
 
+  const debouncedSetSlug = useCallback(
+    debounce((title) => {
+      if (!isSlugEditedRef.current) {
+        setValue("slug", slugTransform(title), { shouldValidate: true });
+      }
+    }, 300),
+    [setValue, slugTransform]
+  );
+
   useEffect(() => {
     const subscription = watch((value, { name }) => {
       if (name === "title") {
-        setValue("slug", slugTransform(value.title, { shouldValidate: true }));
+        debouncedSetSlug(value.title);
       }
     });
 
     return () => {
       subscription.unsubscribe();
+      debouncedSetSlug.cancel();
     };
-  }, [watch, slugTransform, setValue]);
+  }, [watch, debouncedSetSlug]);
 
   return (
     <form
@@ -89,7 +101,7 @@ const PostForm = ({ post }) => {
         <Input
           label="Title"
           placeholder="Enter Post Title"
-          className=""
+          className="text-black"
           {...register("title", { required: "Title is required." })}
         />
         {errors.title && (
@@ -99,9 +111,10 @@ const PostForm = ({ post }) => {
         <Input
           label="Slug"
           placeholder="Slug"
-          className=""
+          className="text-black"
           {...register("slug", { required: "Slug is required." })}
-          onInput={(e) => {
+          onChange={(e) => {
+            isSlugEditedRef.current = true;
             setValue("slug", slugTransform(e.currentTarget.value), {
               shouldValidate: true,
             });
@@ -124,6 +137,7 @@ const PostForm = ({ post }) => {
         <Input
           label="Featured Image"
           type="file"
+          className="text-black"
           accept="image/png, image/jpg, image/jpeg, image/gif"
           {...register("image", { required: !post })}
         />

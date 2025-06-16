@@ -16,21 +16,22 @@ const Header = () => {
   ];
 
   return (
-    <header className="py-4 bg-gradient-to-r from-indigo-600 to-purple-600 shadow-lg">
+    <header className="sticky top-0 z-50 backdrop-blur-md bg-white/10 border-b border-white/20">
       <Container>
-        <nav className="flex items-center justify-between">
+        <nav className="flex items-center justify-between py-3 px-4 md:px-6">
           <div className="flex items-center">
-            <Link to="/">
+            <Link to="/" className="flex items-center">
               <Logo width="70px" />
             </Link>
           </div>
-          <ul className="flex items-center gap-4">
+
+          <ul className="flex items-center gap-6">
             {navItems.map((item) =>
               item.active ? (
                 <li key={item.name}>
                   <button
                     onClick={() => navigate(item.slug)}
-                    className="px-5 py-2 bg-white text-indigo-600 font-semibold rounded-full shadow hover:bg-indigo-100 transition duration-200"
+                    className="text-white font-medium hover:text-indigo-300 hover:underline hover:underline-offset-4 transition"
                   >
                     {item.name}
                   </button>

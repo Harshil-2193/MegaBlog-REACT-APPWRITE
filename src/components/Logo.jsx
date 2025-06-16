@@ -6,7 +6,7 @@ const Logo = ({ width = "100px" }) => {
       style={{ width: width }}
       className="flex items-center justify-center text-white text-3xl font-bold"
     >
-      Logo
+      Blogify
     </div>
   );
 };
